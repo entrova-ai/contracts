@@ -2,6 +2,20 @@
 pragma solidity ^0.8.24;
 
 interface IAIOracle {
+    struct Request {
+        address requester;
+        address receiver;
+        string model;
+        string requestDataType;
+        string responseDataType;
+        uint256 tokenLimit;
+        uint256 tokenConsumed;
+        bytes data;
+        bool isFinalized;
+        uint256 segmentCount;
+        uint256 tokenFreezed;
+    }
+
     // Event triggered when a request is created
     event AIRequestCreated(
         uint256 indexed requestId,
