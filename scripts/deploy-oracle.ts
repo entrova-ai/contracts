@@ -1,6 +1,6 @@
 import { ethers, defender } from "hardhat";
 
-const AI_TOKEN_ADDRESS = "";
+const AI_TOKEN_ADDRESS = "0x88B6e8866A6975AdC0888B19661d630EB03841D6";
 
 async function main() {
   const OracleFactory = await ethers.getContractFactory("AIOracle");
@@ -20,7 +20,7 @@ async function main() {
     ],
   ]);
   await aiOracle.waitForDeployment();
-  console.log("AIOracle deployed at: ", aiOracle.getAddress());
+  console.log("AIOracle deployed at: ", await aiOracle.getAddress());
 }
 
 main();

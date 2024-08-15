@@ -11,7 +11,7 @@ async function main() {
     msgSender,
   ]);
   await aiToken.waitForDeployment();
-  console.log("AIToken deployed at: ", aiToken.getAddress());
+  console.log("AIToken deployed at: ", await aiToken.getAddress());
 }
 
 main();
