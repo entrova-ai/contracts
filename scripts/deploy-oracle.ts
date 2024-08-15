@@ -1,6 +1,6 @@
 import { ethers, defender } from "hardhat";
 
-const AI_TOKEN_ADDRESS = "0x88B6e8866A6975AdC0888B19661d630EB03841D6";
+const AI_TOKEN_ADDRESS = process.env.AI_TOKEN_ADDRESS!;
 
 async function main() {
   const OracleFactory = await ethers.getContractFactory("AIOracle");
