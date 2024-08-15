@@ -58,12 +58,15 @@ contract AIOracle is
 
         aiToken = _aiToken;
         minTokenLimit = 5;
-        allowedModels = _allowedModels;
         require(_allowedDataTypes.length == _allowedModels.length);
+        for (uint i = 0; i < allowedModels.length; i++) {
+            allowedModels[i] = _allowedModels[i];
+        }
+
         for (uint i = 0; i < _allowedModels.length; i++) {
-            string memory model = _allowedModels[i];
-            allowedDataTypes[model][0] = _allowedDataTypes[i][0];
-            allowedDataTypes[model][1] = _allowedDataTypes[i][1];
+            string calldata model = _allowedModels[i];
+            _setAllowedDataTypes(model, _allowedDataTypes[i][0], 0);
+            _setAllowedDataTypes(model, _allowedDataTypes[i][1], 1);
         }
     }
 
@@ -297,15 +300,24 @@ contract AIOracle is
     function setAllowedModels(
         string[] calldata newAllowedModels
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        allowedModels = newAllowedModels;
+        for (uint i = 0; i < newAllowedModels.length; i++) {
+            allowedModels[i] = newAllowedModels[i];
+        }
+        while (allowedModels.length > newAllowedModels.length) {
+            allowedModels.pop();
+        }
     }
 
     function setAllowedDataTypes(
         string calldata model,
-        uint256 operationType,
+        uint256 op, // operation
         string[] calldata newAllowedDataTypes
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        allowedDataTypes[model][operationType] = newAllowedDataTypes;
+        string[] storage curAllowedDataTypes = allowedDataTypes[model][op];
+        while (curAllowedDataTypes.length > newAllowedDataTypes.length) {
+            curAllowedDataTypes.pop();
+        }
+        _setAllowedDataTypes(model, newAllowedDataTypes, op);
     }
 
     function setMinTokenLimit(
@@ -378,5 +390,16 @@ contract AIOracle is
             }
         }
         require(isAllowedResponseDataType, "Response data type not allowed");
+    }
+
+    function _setAllowedDataTypes(
+        string calldata model,
+        string[] calldata newAllowedDataTypes,
+        uint256 op
+    ) internal {
+        string[] storage curAllowedDataTypes = allowedDataTypes[model][op];
+        for (uint j = 0; j < newAllowedDataTypes.length; j++) {
+            curAllowedDataTypes[j] = newAllowedDataTypes[j];
+        }
     }
 }
