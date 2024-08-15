@@ -53,6 +53,8 @@ contract AIOracle is
     ) public initializer {
         __AccessControl_init();
 
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+
         aiToken = _aiToken;
         minTokenLimit = 5;
         require(_allowedDataTypes.length == _allowedModels.length);
@@ -162,6 +164,9 @@ contract AIOracle is
         request.tokenFreezed = 0;
 
         address receiver = request.receiver;
+        if (receiver == address(0)) {
+            return;
+        }
         IAIOracleReceiver(receiver).onAIResponseReceive{gas: gasLimit}(
             requestId,
             resultSegments,
