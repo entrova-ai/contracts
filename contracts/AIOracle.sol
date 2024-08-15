@@ -46,10 +46,6 @@ contract AIOracle is
     mapping(address => uint256) private freezeBalances;
     mapping(string => mapping(uint256 => string[])) private allowedDataTypes;
 
-    constructor() {
-        _disableInitializers();
-    }
-
     function initialize(
         address _aiToken,
         string[] calldata _allowedModels,

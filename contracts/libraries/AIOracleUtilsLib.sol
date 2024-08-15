@@ -45,8 +45,21 @@ library AIOracleUtilsLib {
         uint256 op
     ) internal {
         string[] storage curAllowedDataTypes = allowedDataTypes[model][op];
-        for (uint j = 0; j < newAllowedDataTypes.length; j++) {
-            curAllowedDataTypes[j] = newAllowedDataTypes[j];
+        uint i = 0;
+        while (
+            i < curAllowedDataTypes.length && i < newAllowedDataTypes.length
+        ) {
+            curAllowedDataTypes[i] = newAllowedDataTypes[i];
+            i++;
+        }
+
+        while (i < curAllowedDataTypes.length) {
+            curAllowedDataTypes.pop();
+        }
+
+        while (i < newAllowedDataTypes.length) {
+            curAllowedDataTypes.push(newAllowedDataTypes[i]);
+            i++;
         }
     }
 
@@ -54,11 +67,20 @@ library AIOracleUtilsLib {
         string[] storage allowedModels,
         string[] calldata newAllowedModels
     ) internal {
-        for (uint i = 0; i < newAllowedModels.length; i++) {
+        uint i = 0;
+        while (i < allowedModels.length && i < newAllowedModels.length) {
             allowedModels[i] = newAllowedModels[i];
+            i++;
         }
-        while (allowedModels.length > newAllowedModels.length) {
+
+        while (i < allowedModels.length) {
             allowedModels.pop();
+            i++;
+        }
+
+        while (i < newAllowedModels.length) {
+            allowedModels.push(newAllowedModels[i]);
+            i++;
         }
     }
 }
